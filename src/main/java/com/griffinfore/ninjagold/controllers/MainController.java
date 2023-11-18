@@ -22,6 +22,9 @@ public class MainController {
 			session.setAttribute("adventurersLog", adventurersLog);
 		}
 		Integer gold = (Integer)session.getAttribute("gold");
+		if(gold < -50) {
+			return "redirect:/debt";
+		}
 		return "index.jsp";
 	}
 	
@@ -104,7 +107,7 @@ public class MainController {
 		String formattedDate = dateFormat.format(currentDate);
 		String questLog;
 		if(questGold < 0) {
-			questLog = "You went on a quest and somehow lost " + questGold + " gold. (" + formattedDate + ")";
+			questLog = "You went on a quest and somehow lost " + (questGold * -1)  + " gold. (" + formattedDate + ")";
 		}
 		else {
 			questLog = "You went on a quest and gained " + questGold + " gold. (" + formattedDate + ")";
@@ -120,9 +123,39 @@ public class MainController {
 		return "redirect:/";
 	}
 	
+	@RequestMapping("/spa")
+	public String spaRoute(HttpSession session) {
+		Random random = new Random();
+		int spaGold = random.nextInt(16) + 5;
+		int newSpaGold = spaGold * -1;
+		int currentGold = (int) session.getAttribute("gold");
+		int newGoldTotal = currentGold + newSpaGold;
+		session.setAttribute("gold", newGoldTotal);
+		Date currentDate = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d yyyy h:mma");
+		String formattedDate = dateFormat.format(currentDate);
+		String spaLog = "You visted a spa and spent " + spaGold + ". (" + formattedDate + ")";
+		ArrayList<String> protoLog = (ArrayList<String>) session.getAttribute("adventurersLog");
+		int maxLogs = 5;
+		int currentLogSize = protoLog.size();
+		if(currentLogSize >= maxLogs) {
+			protoLog.remove(currentLogSize -1);
+		}
+		protoLog.add(0,spaLog);
+		session.setAttribute("adventurersLog", protoLog);
+		return "redirect:/";
+	}
+	
 	@RequestMapping("/clear")
 	public String clearSession(HttpSession session) {
 		session.invalidate();
 		return "redirect:/";
+	}
+	@RequestMapping("/debt")
+	public String debtRender(HttpSession session) {
+		int owed = (int) session.getAttribute("gold");
+		int owedGold = owed * -1;
+		session.setAttribute("owedGold", owedGold);
+		return "debt.jsp";
 	}
 }

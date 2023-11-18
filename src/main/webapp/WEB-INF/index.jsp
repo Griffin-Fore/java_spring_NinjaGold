@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/css/main.css"/>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<style>.box-margin{margin: 20px;}</style>
 </head>
 <body>
 	<!-- display the gold from session -->
@@ -20,8 +21,8 @@
 	</div>
 	<div class="container fluid">
 		<div class="row">
-			<div class="col-sm-3">
-				<div class="box text-center d-flex justify-content-center" style="border: 2px solid black; margin: 20px; width: 220px;">
+			<div class="col-md-2">
+				<div class="box text-center d-flex justify-content-center box-margin" style="border: 2px solid black; width: 220px;">
 					<form action="/farm" method="POST">
 						<h3 style="margin-top: 20px;">Farm</h3>
 						<p>(earns 10-20 gold)</p>
@@ -29,8 +30,8 @@
 					</form>
 				</div>
 			</div>
-			<div class="col-sm-3">
-				<div class="box text-center d-flex justify-content-center" style="border: 2px solid black; margin: 20px; width:220px;">
+			<div class="col-md-2">
+				<div class="box text-center d-flex justify-content-center box-margin" style="border: 2px solid black; width:220px;">
 					<form action="/cave" method="POST">
 						<h3 style="margin-top: 20px;">Cave</h3>
 						<p>(earns 5-10 gold)</p>
@@ -38,8 +39,8 @@
 					</form>
 				</div>
 			</div>
-			<div class="col-sm-3" >
-				<div class="box text-center d-flex justify-content-center" style="border: 2px solid black; margin: 20px; width:220px;">
+			<div class="col-md-2" >
+				<div class="box text-center d-flex justify-content-center box-margin" style="border: 2px solid black; width:220px;">
 					<form action="/house" method="POST">
 						<h3 style="margin-top: 20px;">House</h3>
 						<p>(earns 2-5 gold)</p>
@@ -47,8 +48,8 @@
 					</form>
 				</div>
 			</div>
-			<div class="col-sm-3">
-				<div class="box text-center d-flex justify-content-center" style="border: 2px solid black; margin: 20px; width: 220px;">
+			<div class="col-md-2">
+				<div class="box text-center d-flex justify-content-center box-margin" style="border: 2px solid black; width: 220px;">
 					<form action="/quest" method="POST">
 						<h3 style="margin-top: 20px;">Quest</h3>
 						<p>(earns/takes 0-50 gold)</p>
@@ -56,18 +57,29 @@
 					</form>
 				</div>
 			</div>
+			<div class="col-md-2">
+				<div class="box text-center d-flex justify-content-center box-margin" style="border: 2px solid black; width: 220px;">
+					<form action="/spa" method="POST">
+						<h3 style="margin-top: 20px;">Spa</h3>
+						<p>(takes 5-20 gold)</p>
+						<input style="margin-bottom: 25px; background-color:white; box-shadow: 5px 5px" type="submit" value="Spend Gold!">
+					</form>
+				</div>
+			</div>			
 		</div>
 	</div>
 
 	<p>Activities:</p>
 	<div style="border:2px solid black">
 		<c:forEach var="venture" items="${adventurersLog}">
-			<c:set var="color" value="${venture.contains('lost') ? 'red' : 'green'}"/>
+			<c:set var="color" value="${venture.contains('lost') || venture.contains('spa') ? 'red' : 'green'}"/>
 			<p style="color: ${color};">
 				<c:out value="${venture}"></c:out>
 			</p>		
 		</c:forEach>
 	</div>
-	
+	<form action="/clear" method="POST">
+		<input type="submit" value="Reset">
+	</form>
 </body>
 </html>
